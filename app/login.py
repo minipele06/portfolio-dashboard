@@ -22,4 +22,8 @@ def login_auth(username,password):
 def create_folder(username):
     isexist = os.path.exists(os.path.join((os.path.dirname(__file__)),"..",f"users/{username}"))
     if isexist == False:
-        os.mkdir(os.path.join((os.path.dirname(__file__)),"..",f"users/{username}")) 
+        path = os.path.join((os.path.dirname(__file__)),"..",f"users/{username}")
+        os.mkdir(path) 
+        with open(f"{path}/{username}.csv", 'w') as f:
+            writer = csv.DictWriter(f, fieldnames=["Stock", "Bought_Price", "Current_Price", "Sold Price", "Gain/Loss"])
+            writer.writeheader()

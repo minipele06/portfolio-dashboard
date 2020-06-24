@@ -6,6 +6,10 @@
 
             <h1>Welcome {{username}}</h1>
 
-            <p>todo write some stuff here</p>  
+            <br>
+
+            {% for elem in results[] %}
+                <li>{{ elem["Stock"] }} | {{ elem["Bought_Price"] }} | {{ elem["Current_Price"] }} | {{ elem["Gain/Loss"] }}</li>
+            {% endfor %}
 
 {% endblock %}

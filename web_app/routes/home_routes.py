@@ -1,5 +1,7 @@
 from flask import Blueprint, render_template, redirect, request, flash
 from dotenv import load_dotenv
+import csv
+import os
 
 from app import Log_status
 from app.login import login_auth
@@ -48,8 +50,11 @@ def check_user():
         return redirect("/")
     else:
         create_folder(user['username'])
-        flash(f"{results}", "success")
-        return render_template("dashboard.html", username=user['username'])
+        csv_file_path = os.path.join((os.path.dirname(__file__)),"..","..", f"users/{user['username']}", f"{user['username']}.csv")
+        with open(csv_file_path, "r") as csv_file: # "r" means "open the file for reading"
+            reader = csv.DictReader(csv_file) # assuming your CSV has headers
+        flash(f"{results}, {csv_file_path}", "success")
+        return render_template("dashboard.html", username=user['username'], results=reader)
 
 @home_routes.route("/users/create", methods=["POST"])
 def create_user():
