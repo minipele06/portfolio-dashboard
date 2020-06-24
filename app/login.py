@@ -18,3 +18,8 @@ def login_auth(username,password):
 
     result = "Username/Password Incorrect"
     return result
+
+def create_folder(username):
+    isexist = os.path.exists(os.path.join((os.path.dirname(__file__)),"..",f"users/{username}"))
+    if isexist == False:
+        os.mkdir(os.path.join((os.path.dirname(__file__)),"..",f"users/{username}")) 

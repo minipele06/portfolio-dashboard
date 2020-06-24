@@ -5,6 +5,7 @@ from app import Log_status
 from app.login import login_auth
 from app.signup import signup
 from app.active_user import active_user
+from app.login import create_folder
 
 Log_stat = "out"
 home_routes = Blueprint("home_routes", __name__)
@@ -46,6 +47,7 @@ def check_user():
         flash(f"{results}", "danger")
         return redirect("/")
     else:
+        create_folder(user['username'])
         flash(f"{results}", "success")
         return render_template("dashboard.html", username=user['username'])
 
