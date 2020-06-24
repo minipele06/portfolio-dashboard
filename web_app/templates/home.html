@@ -26,7 +26,18 @@
             .login-box {
                 position: relative;
                 top: 20px;
-                left: 30px;
+                left: 250px;
+                color: black;
+                padding-left: 40px;
+                padding-bottom: 10px;
+                margin-right: 55vw;
+                border: #0f0f12 outset 2px;
+                border-radius: 15px;
+            }
+            .signup-box {
+                position: relative;
+                top: -180px;
+                left: 750px;
                 color: black;
                 padding-left: 40px;
                 padding-bottom: 10px;
@@ -75,9 +86,34 @@
                 </select>
                 <br>
         
-                <button>Submit</button><button>Sign Up</button>
+                <button>Login</button>
             </form>
 
+        </div>
+        <div class="signup-box">
+            <h1>Sign Up</h1>
+
+            <form action="/users/create" method="POST">
+
+                <label>Full Name:</label>
+                <input type="text" name="full_name" placeholder="John Smith" value="">
+                <br>
+        
+                <label>Username:</label>
+                <input type="text" name="email_address" placeholder="johnsmith" value="">
+                <br>
+        
+                <label>Country:</label>
+                <select name="country">
+                    <option value="US" selected="true">United States</option>
+                    <option value="UK">United Kingdom</option>
+                    <option value="Japan">Japan</option>
+                    <option value="UAE">United Arab Emirates</option>
+                </select>
+                <br>
+        
+                <button>Register</button>
+            </form>
         </div>
         <div class="footer">
             <hr>
