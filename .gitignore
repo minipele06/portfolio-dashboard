@@ -131,3 +131,6 @@ dmypy.json
 #usernames and passwords
 credentials/
 
+#ignore to-do list
+to-do.txt
+
