@@ -9,4 +9,3 @@ def active_user():
             if row["Username"] != "Username":
                 result = row["Username"]
                 return result
-                exit()

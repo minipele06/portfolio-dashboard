@@ -1,10 +1,5 @@
 import csv
 import os
-from dotenv import load_dotenv
-
-from app import Log_status
-
-load_dotenv()
 
 def login_auth(username,password):
     csv_filepath = os.path.join((os.path.dirname(__file__)),"..", "credentials", "u&p.csv")
@@ -20,7 +15,6 @@ def login_auth(username,password):
                         writer.writerow({"Username": username, "Email": row["Email"]})
                     result = "Logged In"
                     return result
-                    exit()
 
     result = "Username/Password Incorrect"
     return result

@@ -9,7 +9,6 @@ def signup(email,username,password):
             if row["Username"] == str(username):
                 result = "Username Is Already Taken"
                 return result
-                exit()
 
     with open(csv_filepath, "a+",newline="") as csv_file:
         writer = csv.DictWriter(csv_file, fieldnames=["Username", "Password", "Email"])
