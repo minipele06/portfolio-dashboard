@@ -1,6 +1,10 @@
 import csv
-import pandas as pd 
 import os
+from dotenv import load_dotenv
+
+from app import Log_status
+
+load_dotenv()
 
 def login_auth(username,password):
     csv_filepath = os.path.join((os.path.dirname(__file__)),"..", "credentials", "u&p.csv")
@@ -9,6 +13,11 @@ def login_auth(username,password):
         for row in reader:
             if row["Username"] == str(username):
                 if row["Password"] == str(password):
+                    csv_filepath2 = os.path.join((os.path.dirname(__file__)),"..", "users", "active_user.csv")
+                    with open(csv_filepath2, "w") as csv_file: # "w" means "open the file for writing"
+                        writer = csv.DictWriter(csv_file, fieldnames=["Username", "Email"])
+                        writer.writeheader() # uses fieldnames set above
+                        writer.writerow({"Username": username, "Email": row["Email"]})
                     result = "Logged In"
                     return result
                     exit()

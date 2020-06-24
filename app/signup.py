@@ -1,5 +1,4 @@
 import csv
-import pandas as pd 
 import os
 
 def signup(email,username,password):

@@ -37,12 +37,14 @@
     <!-- see: https://jinja.palletsprojects.com/en/2.11.x/tricks/ -->
     <!-- see: https://getbootstrap.com/docs/4.0/components/navbar/ -->
     {% set nav_links = [
-      ('/about', 'about', 'About'),
-      ('/register', 'new_user', 'Login/Sign Up')
+      ('/dashboard', 'dashboard', 'Dashboard'),
+      ('/allocations', 'allocations', 'Allocations'),
+      ('/watch-list', 'watch-list', 'Watchlist'),
+      ('/logout', 'logout', 'Logout'),
     ] -%}
     {% set active_page = active_page|default('index') -%}
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-      <a class="navbar-brand" href="/">Portfolio Simulator</a>
+      <a class="navbar-brand" href="/dashboard">Portfolio Simulator</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
