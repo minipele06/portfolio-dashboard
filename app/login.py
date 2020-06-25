@@ -9,9 +9,9 @@ def login_auth(username,password):
             if row["Username"] == str(username):
                 if row["Password"] == str(password):
                     csv_filepath2 = os.path.join((os.path.dirname(__file__)),"..", "users", "active_user.csv")
-                    with open(csv_filepath2, "w") as csv_file: # "w" means "open the file for writing"
+                    with open(csv_filepath2, "w") as csv_file:
                         writer = csv.DictWriter(csv_file, fieldnames=["Username", "Email"])
-                        writer.writeheader() # uses fieldnames set above
+                        writer.writeheader()
                         writer.writerow({"Username": username, "Email": row["Email"]})
                     result = "Logged In"
                     return result

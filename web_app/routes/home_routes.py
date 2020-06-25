@@ -7,12 +7,14 @@ import pandas as pd
 from app.login import login_auth
 from app.signup import signup
 from app.active_user import active_user
+from app.active_user import clear_user
 from app.login import create_folder
 
 home_routes = Blueprint("home_routes", __name__)
 
 @home_routes.route("/")
 def index():
+    clear_user()
     return render_template("home.html")
 
 @home_routes.route("/about")
@@ -90,4 +92,5 @@ def sell_order():
 @home_routes.route("/logout")
 def logout():
     flash(f"You Have Succesfully Logged Out", "success")
+    clear_user()
     return redirect("/")
