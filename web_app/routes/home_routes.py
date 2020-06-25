@@ -9,6 +9,14 @@ from app.signup import signup
 from app.active_user import active_user
 from app.active_user import clear_user
 from app.login import create_folder
+from app.live_price import live_price
+
+def to_usd(my_price):
+    return f"${my_price:,.2f}"
+
+load_dotenv()
+
+API_KEY = os.getenv("ALPHAVANTAGE_API_KEY")
 
 home_routes = Blueprint("home_routes", __name__)
 
@@ -79,14 +87,23 @@ def create_user():
 def buy_order():
     print("FORM DATA:", dict(request.form))
     user = dict(request.form)
-    flash(f"{user}", "success")
+    results = live_price(user['ticker'],API_KEY)
+    if str(results) == "Invalid Stock Symbol, Try Again":
+        flash(f"{results}", "danger")
+    else:
+        flash(f"{results}", "success")
     return redirect("/buy-sell")
 
 @home_routes.route("/users/sell", methods=["POST"])
 def sell_order():
     print("FORM DATA:", dict(request.form))
     user = dict(request.form)
-    flash(f"{user}", "success")
+    shares = int(user['share_count'])
+    results = live_price(user['ticker'],API_KEY)
+    if str(results) == "Invalid Stock Symbol, Try Again":
+        flash(f"{results}", "danger")
+    else:
+        flash(f"You Sold {shares} Shares of {user['ticker']} For {to_usd(results*shares)}", "success")
     return redirect("/buy-sell")
 
 @home_routes.route("/logout")

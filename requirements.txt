@@ -3,3 +3,4 @@
 python-dotenv
 Flask
 pandas
+requests
