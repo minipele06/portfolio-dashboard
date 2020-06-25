@@ -1,0 +1,28 @@
+{% extends "bootstrap_layout2.html" %}
+{% set active_page = "transactions" %}
+
+{% block content %}
+
+    <h1>Transaction History</h1>
+
+    <table style="width:100%">
+        <!-- table header -->
+        {% if results %}
+        <tr>
+           {% for item in results[0] %}
+           <th> {{ item }} </th>
+           {% endfor %}
+        </tr>
+        {% endif %}
+      
+        <!-- table rows -->
+        {% for dict_item in results %}
+        <tr>
+           {% for value in dict_item.values() %}
+           <td> {{ value }} </td>
+           {% endfor %}
+        </tr>
+        {% endfor %}
+    </table>
+
+{% endblock %}

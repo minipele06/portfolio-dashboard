@@ -3,15 +3,12 @@ from dotenv import load_dotenv
 import csv
 import os
 import pandas as pd 
-import itertools
 
-from app import Log_status
 from app.login import login_auth
 from app.signup import signup
 from app.active_user import active_user
 from app.login import create_folder
 
-Log_stat = "out"
 home_routes = Blueprint("home_routes", __name__)
 
 @home_routes.route("/")
@@ -22,13 +19,16 @@ def index():
 def about():
     return render_template("about.html")
 
-@home_routes.route("/allocations")
-def alloc():
-    return render_template("allocations.html")
+@home_routes.route("/buy-sell")
+def buy_sell():
+    return render_template("buy_sell.html")
 
-@home_routes.route("/watch-list")
-def watch():
-    return render_template("watch_list.html")
+@home_routes.route("/transactions")
+def transac():
+    username = active_user()
+    csv_file_path = os.path.join((os.path.dirname(__file__)),"..","..", f"users/{username}", f"{username}_transactions.csv")
+    results = pd.read_csv(csv_file_path).to_dict("records")
+    return render_template("transactions.html", results=results)
 
 @home_routes.route("/register")
 def register():
@@ -36,38 +36,41 @@ def register():
 
 @home_routes.route("/dashboard", methods=["GET"])
 def dashboard():
-    results = active_user()
-    csv_file_path = os.path.join((os.path.dirname(__file__)),"..","..", f"users/{results}", f"{results}.csv")
-    result = pd.read_csv(csv_file_path).to_dict("records")
-    return render_template("dashboard.html", username=results, results=result)
+    username = active_user()
+    csv_file_path = os.path.join((os.path.dirname(__file__)),"..","..", f"users/{username}", f"{username}.csv")
+    csv_file_path2 = os.path.join((os.path.dirname(__file__)),"..","..", f"users/{username}", f"{username}_transactions.csv")
+    results = pd.read_csv(csv_file_path).to_dict("records")
+    stocks_df = pd.read_csv(csv_file_path)
+    transactions_df = pd.read_csv(csv_file_path2)
+    cash_value = transactions_df["Value"].sum()
+    positions = stocks_df["Total Value"].sum()
+    total = cash_value + positions
+    return render_template("dashboard.html", username=username, results=results, value=cash_value, value2=positions, value3=total)
 
 @home_routes.route("/users/login", methods=["POST"])
 def check_user():
-    print("FORM DATA:", dict(request.form))
     user = dict(request.form)
+    username = user['username']
+    password = user['password']
     # FYI: "warning", "primary", "danger", "success", etc. are bootstrap color classes
-    # ... see https://getbootstrap.com/docs/4.3/components/alerts/
-    # ... and the flash messaging section of the "bootstrap_layout.html" file for more details
-    results = login_auth(user['username'],user['password'])
-    if str(results) == "Username/Password Incorrect":
-        flash(f"{results}", "danger")
+    login_status = login_auth(username,password)
+    if str(login_status) == "Username/Password Incorrect":
+        flash(f"{login_status}", "danger")
         return redirect("/")
     else:
-        create_folder(user['username'])
-        csv_file_path = os.path.join((os.path.dirname(__file__)),"..","..", f"users/{user['username']}", f"{user['username']}.csv")
-        result = pd.read_csv(csv_file_path).to_dict("records")
-        flash(f"{results}", "success")
-        return render_template("dashboard.html", username=user['username'], results=result)
+        create_folder(username)
+        flash(f"{login_status}", "success")
+        return redirect("/dashboard")
 
 @home_routes.route("/users/create", methods=["POST"])
 def create_user():
     print("FORM DATA:", dict(request.form))
     user = dict(request.form)
-    # FYI: "warning", "primary", "danger", "success", etc. are bootstrap color classes
-    # ... see https://getbootstrap.com/docs/4.3/components/alerts/
-    # ... and the flash messaging section of the "bootstrap_layout.html" file for more details
     results = signup(user['email'],user['username'],user['password'])
-    flash(f"{results}", "success")
+    if str(results) == "Username Is Already Taken":
+        flash(f"{results}", "danger")
+    else:
+        flash(f"{results}", "success")
     return redirect("/")
 
 @home_routes.route("/logout")

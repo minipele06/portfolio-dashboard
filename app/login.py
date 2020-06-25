@@ -25,5 +25,10 @@ def create_folder(username):
         path = os.path.join((os.path.dirname(__file__)),"..",f"users/{username}")
         os.mkdir(path) 
         with open(f"{path}/{username}.csv", 'w') as f:
-            writer = csv.DictWriter(f, fieldnames=["Stock", "Bought_Price", "Current_Price", "Sold Price", "Gain/Loss"])
+            writer = csv.DictWriter(f, fieldnames=["Stock", "Bought Price", "Current Price", "Shares", "Total Value", "Unrealized Gain/Loss"])
             writer.writeheader()
+            writer.writerow({"Stock": " ", "Bought Price": " ", "Current Price": " ", "Shares": " ", "Total Value":" ", "Unrealized Gain/Loss": " "})
+        with open(f"{path}/{username}_Transactions.csv", 'w') as f:
+            writer = csv.DictWriter(f, fieldnames=["Transaction", "Value"])
+            writer.writeheader()
+            writer.writerow({"Transaction": "Initial Funding", "Value": "100,000"})
