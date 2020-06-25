@@ -6,10 +6,35 @@
 
             <h1>Welcome {{username}}</h1>
 
+            <p1>Current Positions</p1>
+            <!-- <p1>{{results}}</p1> -->
+            <!-- <p1>{{results[0]['Stock']}}</p1>
             <br>
-
-            {% for elem in results[] %}
-                <li>{{ elem["Stock"] }} | {{ elem["Bought_Price"] }} | {{ elem["Current_Price"] }} | {{ elem["Gain/Loss"] }}</li>
+            <ul>
+            {% for item in results %}
+                <li>{{item['Stock']}} | {{item['Bought_Price']}}</li>
             {% endfor %}
+            </ul> -->
+            <br>
+            <br>
+            <table style="width:100%">
+                <!-- table header -->
+                {% if results %}
+                <tr>
+                   {% for item in results[0] %}
+                   <th> {{ item }} </th>
+                   {% endfor %}
+                </tr>
+                {% endif %}
+              
+                <!-- table rows -->
+                {% for dict_item in results %}
+                <tr>
+                   {% for value in dict_item.values() %}
+                   <td> {{ value }} </td>
+                   {% endfor %}
+                </tr>
+                {% endfor %}
+              </table>
 
 {% endblock %}

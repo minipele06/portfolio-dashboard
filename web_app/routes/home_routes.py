@@ -2,6 +2,8 @@ from flask import Blueprint, render_template, redirect, request, flash
 from dotenv import load_dotenv
 import csv
 import os
+import pandas as pd 
+import itertools
 
 from app import Log_status
 from app.login import login_auth
@@ -35,7 +37,9 @@ def register():
 @home_routes.route("/dashboard", methods=["GET"])
 def dashboard():
     results = active_user()
-    return render_template("dashboard.html", username=results)
+    csv_file_path = os.path.join((os.path.dirname(__file__)),"..","..", f"users/{results}", f"{results}.csv")
+    result = pd.read_csv(csv_file_path).to_dict("records")
+    return render_template("dashboard.html", username=results, results=result)
 
 @home_routes.route("/users/login", methods=["POST"])
 def check_user():
@@ -51,10 +55,9 @@ def check_user():
     else:
         create_folder(user['username'])
         csv_file_path = os.path.join((os.path.dirname(__file__)),"..","..", f"users/{user['username']}", f"{user['username']}.csv")
-        with open(csv_file_path, "r") as csv_file: # "r" means "open the file for reading"
-            reader = csv.DictReader(csv_file) # assuming your CSV has headers
-        flash(f"{results}, {csv_file_path}", "success")
-        return render_template("dashboard.html", username=user['username'], results=reader)
+        result = pd.read_csv(csv_file_path).to_dict("records")
+        flash(f"{results}", "success")
+        return render_template("dashboard.html", username=user['username'], results=result)
 
 @home_routes.route("/users/create", methods=["POST"])
 def create_user():
