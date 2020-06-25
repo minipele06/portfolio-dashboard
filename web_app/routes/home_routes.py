@@ -73,6 +73,20 @@ def create_user():
         flash(f"{results}", "success")
     return redirect("/")
 
+@home_routes.route("/users/buy", methods=["POST"])
+def buy_order():
+    print("FORM DATA:", dict(request.form))
+    user = dict(request.form)
+    flash(f"{user}", "success")
+    return redirect("/buy-sell")
+
+@home_routes.route("/users/sell", methods=["POST"])
+def sell_order():
+    print("FORM DATA:", dict(request.form))
+    user = dict(request.form)
+    flash(f"{user}", "success")
+    return redirect("/buy-sell")
+
 @home_routes.route("/logout")
 def logout():
     flash(f"You Have Succesfully Logged Out", "success")

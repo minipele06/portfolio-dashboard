@@ -1,10 +1,81 @@
+<!doctype html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+            .buy-box {
+                position: relative;
+                top: 10vh;
+                left: 4vw;
+                color: black;
+                padding-left: 40px;
+                padding-bottom: 10px;
+                margin-right: 56vw;
+                border: #0f0f12 outset 2px;
+                border-radius: 15px;
+            }
+            .sell-box {
+                position: relative;
+                top: -18vh;
+                left: 50vw;
+                color: black;
+                padding-left: 40px;
+                padding-bottom: 10px;
+                margin-right: 56vw;
+                border: #0f0f12 outset 2px;
+                border-radius: 15px;
+            }
+        </style>
+    </head>
+
 {% extends "bootstrap_layout2.html" %}
 {% set active_page = "buy/sell" %}
 
 {% block content %}
 
-    <h1>About Me</h1>
+    <h1>Trading Platform</h1>
 
-    <p>todo write some stuff here</p>
+    <p>Enter Stock That You'd Like To Purchase Or Sell An Existing Position</p>
 
+    <div class="buy-box">
+        <h1>Buy</h1>
+
+        <form action="/users/buy" method="POST">
+
+            <label>Stock Ticker:</label>
+            <input type="text" name="ticker" placeholder="AAPL" value="">
+            <br>
+    
+            <label>Shares:</label>
+            <input type="text" name="share_count" placeholder="100" value="">
+            <br>
+
+            <label>Price:</label>
+            <input type="text" name="price" placeholder="10.00" value="">
+            <br>
+    
+            <button>Execute</button>
+        </form>
+    </div>
+    <div class="sell-box">
+        <h1>Sell</h1>
+
+        <form action="/users/sell" method="POST">
+
+            <label>Stock Ticker:</label>
+            <input type="text" name="ticker" placeholder="AAPL" value="">
+            <br>
+    
+            <label>Shares:</label>
+            <input type="text" name="share_count" placeholder="100" value="">
+            <br>
+
+            <label>Price:</label>
+            <input type="text" name="price" placeholder="10.00" value="">
+            <br>
+    
+            <button>Execute</button>
+        </form>
+    </div>
+</html>
 {% endblock %}
