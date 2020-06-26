@@ -116,15 +116,29 @@ def buy_order():
 
 @home_routes.route("/users/sell", methods=["POST"])
 def sell_order():
-    print("FORM DATA:", dict(request.form))
+    stock_list = []
+    username = active_user()
+    csv_file_path = os.path.join((os.path.dirname(__file__)),"..","..", f"users/{username}", f"{username}.csv")
+    data = pd.read_csv(csv_file_path).to_dict("records")
+    # for lines in data:
+    #     stock_list.append(lines["Stock"])
     user = dict(request.form)
-    results = live_price(user['ticker'],API_KEY)
-    if str(results) == "Invalid Stock Symbol, Try Again":
-        flash(f"{results}", "danger")
+    stock_list = [n["Stock"] for n in data if n["Stock"] == user['ticker']]
+    if not stock_list:
+        flash(f"You Do Not Own That Stock", "danger")
     else:
-        shares = int(user['share_count'])
-        flash(f"You Sold {shares} Shares of {user['ticker']} For {to_usd(results*shares)}", "success")
+        results = live_price(user['ticker'],API_KEY)
+        if str(results) == "Invalid Stock Symbol, Try Again":
+            flash(f"{results}", "danger")
+        else:
+            shares = int(user['share_count'])
+            flash(f"You Sold {shares} Shares of {user['ticker']} For {to_usd(results*shares)}", "success")
     return redirect("/buy-sell")
+
+@home_routes.route("/users/update")
+def update():
+    flash(f"Market Values Updated", "success")
+    return redirect("/dashboard")
 
 @home_routes.route("/logout")
 def logout():

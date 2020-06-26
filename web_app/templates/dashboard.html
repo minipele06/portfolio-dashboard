@@ -1,3 +1,20 @@
+<!doctype html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+            .update {
+                position: relative;
+                top: -46vh;
+                left: 60.5vw;
+                color: black;
+                padding-left: 40px;
+                padding-bottom: 10px;
+                margin-right: 56vw;
+            }
+        </style>
+    </head>
+
 {% extends "bootstrap_layout2.html" %}
 {% set active_page = "dashboard" %}
 
@@ -35,5 +52,10 @@
             <p1>Current Positions Value: {{value2}}</p1>
             <br>
             <p1>Current Account Value: {{value3}}</p1>
-
+            <div class="update">
+                <form action="/users/update" method="GET">
+                    <button>Update Market Values</button>
+                </form>
+            </div>
+</html>
 {% endblock %}
