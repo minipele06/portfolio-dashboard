@@ -27,8 +27,7 @@ def create_folder(username):
         with open(f"{path}/{username}.csv", 'w') as f:
             writer = csv.DictWriter(f, fieldnames=["Stock", "Bought Price", "Current Price", "Shares", "Total Value", "Unrealized Gain/Loss"])
             writer.writeheader()
-            writer.writerow({"Stock": " ", "Bought Price": " ", "Current Price": " ", "Shares": " ", "Total Value":" ", "Unrealized Gain/Loss": " "})
         with open(f"{path}/{username}_Transactions.csv", 'w') as f:
             writer = csv.DictWriter(f, fieldnames=["Transaction", "Value"])
             writer.writeheader()
-            writer.writerow({"Transaction": "Initial Funding", "Value": "100,000"})
+            writer.writerow({"Transaction": "Initial Funding", "Value": "100000"})

@@ -10,6 +10,7 @@ from app.active_user import active_user
 from app.active_user import clear_user
 from app.login import create_folder
 from app.live_price import live_price
+from app.live_price import transac_rec
 
 def to_usd(my_price):
     return f"${my_price:,.2f}"
@@ -50,12 +51,19 @@ def dashboard():
     csv_file_path = os.path.join((os.path.dirname(__file__)),"..","..", f"users/{username}", f"{username}.csv")
     csv_file_path2 = os.path.join((os.path.dirname(__file__)),"..","..", f"users/{username}", f"{username}_transactions.csv")
     results = pd.read_csv(csv_file_path).to_dict("records")
+    if len(results) == 0:
+        results = ""
     stocks_df = pd.read_csv(csv_file_path)
     transactions_df = pd.read_csv(csv_file_path2)
-    cash_value = transactions_df["Value"].sum()
+    cash_value = float(transactions_df["Value"].sum())
     positions = stocks_df["Total Value"].sum()
-    total = cash_value + positions
-    return render_template("dashboard.html", username=username, results=results, value=cash_value, value2=positions, value3=total)
+    if positions == " ":
+        positions = 0.00
+        total = cash_value
+    else:
+        positions = float(positions)
+        total = cash_value + positions
+    return render_template("dashboard.html", username=username, results=results, value=to_usd(cash_value), value2=to_usd(positions), value3=to_usd(total))
 
 @home_routes.route("/users/login", methods=["POST"])
 def check_user():
@@ -91,18 +99,21 @@ def buy_order():
     if str(results) == "Invalid Stock Symbol, Try Again":
         flash(f"{results}", "danger")
     else:
-        flash(f"{results}", "success")
+        shares = int(user['share_count'])
+        flash(f"You Bought {shares} Shares of {user['ticker']} For {to_usd(results*shares)}", "success")
+        username = active_user()
+        transac_rec(user['ticker'],results,shares,username,"Buy")
     return redirect("/buy-sell")
 
 @home_routes.route("/users/sell", methods=["POST"])
 def sell_order():
     print("FORM DATA:", dict(request.form))
     user = dict(request.form)
-    shares = int(user['share_count'])
     results = live_price(user['ticker'],API_KEY)
     if str(results) == "Invalid Stock Symbol, Try Again":
         flash(f"{results}", "danger")
     else:
+        shares = int(user['share_count'])
         flash(f"You Sold {shares} Shares of {user['ticker']} For {to_usd(results*shares)}", "success")
     return redirect("/buy-sell")
 
