@@ -93,16 +93,25 @@ def create_user():
 
 @home_routes.route("/users/buy", methods=["POST"])
 def buy_order():
-    print("FORM DATA:", dict(request.form))
     user = dict(request.form)
+    username = active_user()
     results = live_price(user['ticker'],API_KEY)
+    csv_file_path = os.path.join((os.path.dirname(__file__)),"..","..", f"users/{username}", f"{username}.csv")
+    pos_count = len(pd.read_csv(csv_file_path).to_dict("records"))
+    csv_file_path2 = os.path.join((os.path.dirname(__file__)),"..","..", f"users/{username}", f"{username}_transactions.csv")
+    transactions_df = pd.read_csv(csv_file_path2)
+    cash_value = float(transactions_df["Value"].sum())
     if str(results) == "Invalid Stock Symbol, Try Again":
         flash(f"{results}", "danger")
+    elif pos_count > 4:
+        flash(f"Reached Positions Limit of 5, Please Sell Position Before Buying A New One", "danger")
     else:
         shares = int(user['share_count'])
-        flash(f"You Bought {shares} Shares of {user['ticker']} For {to_usd(results*shares)}", "success")
-        username = active_user()
-        transac_rec(user['ticker'],results,shares,username,"Buy")
+        if (shares*results) > cash_value:
+            flash(f"Insufficient Funds", "danger")
+        else:   
+            flash(f"You Bought {shares} Shares of {user['ticker']} For {to_usd(results*shares)}", "success")
+            transac_rec(user['ticker'],results,shares,username,"Buy")
     return redirect("/buy-sell")
 
 @home_routes.route("/users/sell", methods=["POST"])

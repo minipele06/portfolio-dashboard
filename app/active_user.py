@@ -14,4 +14,3 @@ def clear_user():
     with open(csv_filepath, "w") as csv_file:
         writer = csv.DictWriter(csv_file, fieldnames=["Username", "Email"])
         writer.writerow({"Username": "", "Email": ""})
-        

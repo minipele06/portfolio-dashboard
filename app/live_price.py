@@ -31,4 +31,6 @@ def transac_rec(symbol,price,shares,username,direction):
         else:
             writer.writerow({"Transaction": f"Sold {shares} Shares of {symbol}", "Value": shares*price})
 
-   
+csv_file_path = os.path.join((os.path.dirname(__file__)),"..", f"users/aa2", f"aa2.csv")
+results = len(pd.read_csv(csv_file_path).to_dict("records"))
+print(results)    
