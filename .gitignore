@@ -129,11 +129,14 @@ dmypy.json
 .pyre/
 
 #usernames and passwords
-credentials/
+credentials/*
 
 #exclude users
-users/
+users/*
 
 #ignore to-do list
 to-do.txt
+
+#exception
+!.gitkeep
 
