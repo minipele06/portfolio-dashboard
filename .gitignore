@@ -139,4 +139,5 @@ to-do.txt
 
 #exception
 !.gitkeep
+!active_user.csv
 
