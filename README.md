@@ -79,9 +79,13 @@ If any of the fields are empty, the program will give you an error message.
 
 The forgot password button is not currently functional and will only flash a warning message.
 
+![Image of Home Page](screenshots/Home.png)
+
 ### About Page
 
 The about page quickly delves in to the user needs that the program is intending to fulfill. 
+
+![Image of About Page](screenshots/About.png)
 
 ### Dashboard
 
@@ -89,7 +93,9 @@ The Dashboard page shows the user the current positions he/she holds. Additional
 
 The current positions table shows the individual stocks held, the price they were bought at, the current price (as of which it was last updated), the number of shares held, the total position value by stock, and the unrealized gain/loss on the stock. 
 
-To update the market value of the stock portfolio, hit update market values. This will update the current price to the market and calculate the new total position value by stock and unrealized gain/loss on each stock as well as the new total stock value and total account value. 
+To update the market value of the stock portfolio, hit update market values. This will update the current price to the market and calculate the new total position value by stock and unrealized gain/loss on each stock as well as the new total stock value and total account value.
+
+![Image of Dashboard Page](screenshots/Dashboard.png)
 
 ### Buy/Sell
 
@@ -107,18 +113,30 @@ Sell orders will be checked in a similar fashion and will additionally be requir
 
 Blank entries will return an invalid request.
 
+![Image of Trading Page](screenshots/Trade.png)
+
 ### Transactions
 
 The Transaction History Page keeps a log of all of the transactions that have occured in that account. Stock purchases are represented by a negative value (cash outflow) and stock sales are represented by a positive value (cash inflow).
+
+![Image of Transaction Page](screenshots/Transaction.png)
 
 ### Logout
 
 The logout page brings users back to the home page and requires them to log back in again before they are able to access their specific dashboard page again. 
 
+![Image of Transaction Page](screenshots/Logout.png)
+
 ## Quality
 
 The below screenshot shows the results of running the code through Code Climate in order to test the simplicity and maintainability of the code
 
-![Image of Code Climate](/codeclimate.png)
+![Image of Code Climate](screenshots/codeclimate.png)
 
 ## Minimum Viable Product
+
+The following program was created as a minimum viable product and therefore is missing some functionality. Some of said missing functionality include:
+
+* Forgot Password Reset
+* Viewing Live Price before execution
+* Email confirmation of trade
