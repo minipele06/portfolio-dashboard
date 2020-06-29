@@ -12,8 +12,8 @@ from app.login import create_folder
 from app.live_price import live_price
 from app.live_price import transac_rec
 from app.live_price import update_prices
-from app.order import buy_transac
-from app.order import sell_transac
+from app.live_price import buy_transac
+from app.live_price import sell_transac
 from app.format import format_dict
 from app.format import format_dict2
 
