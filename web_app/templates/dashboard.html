@@ -5,7 +5,7 @@
         <style>
             .update {
                 position: relative;
-                top: -3.5vh;
+                top: -46vh;
                 left: 70vw;
                 color: black;
                 margin-right: 2vw;
@@ -35,11 +35,7 @@
             <h1>Welcome {{username}}</h1>
             <br>
             <p1>Current Positions</p1>
-            <div class="update">
-                <form action="/users/update" method="GET">
-                    <button>Update Market Values</button>
-                </form>
-            </div>
+            <br>
             <br>
             <table style="width:100%">
                 <!-- table header -->
@@ -67,5 +63,10 @@
             <p1>Current Positions Value: {{value2}}</p1>
             <br>
             <p1>Current Account Value: {{value3}}</p1>
+            <div class="update">
+                <form action="/users/update" method="GET">
+                    <button>Update Market Values</button>
+                </form>
+            </div>
 </html>
 {% endblock %}
