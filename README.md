@@ -63,4 +63,4 @@ Finally, the program will notify you of the information outlined in the function
 
 ## Quality
 
-![Image of Yaktocat](https://octodex.github.com/images/yaktocat.png)
+![Image of Code Climate](/Users/anantoamin/Desktop/codeclimate.png)
