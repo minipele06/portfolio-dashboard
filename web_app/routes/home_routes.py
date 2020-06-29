@@ -12,6 +12,8 @@ from app.login import create_folder
 from app.live_price import live_price
 from app.live_price import transac_rec
 from app.live_price import update_prices
+from app.format import format_dict
+from app.format import format_dict2
 
 def to_usd(my_price):
     return f"${my_price:,.2f}"
@@ -40,11 +42,8 @@ def transac():
     username = active_user()
     csv_file_path = os.path.join((os.path.dirname(__file__)),"..","..", f"users/{username}", f"{username}_transactions.csv")
     results = pd.read_csv(csv_file_path).to_dict("records")
+    format_dict2(results)
     return render_template("transactions.html", results=results)
-
-@home_routes.route("/register")
-def register():
-    return render_template("new_user_form.html")
 
 @home_routes.route("/dashboard", methods=["GET"])
 def dashboard():
@@ -62,6 +61,7 @@ def dashboard():
         positions = 0.00
         total = cash_value
     else:
+        format_dict(results)
         positions = float(positions)
         total = cash_value + positions
     return render_template("dashboard.html", username=username, results=results, value=to_usd(cash_value), value2=to_usd(positions), value3=to_usd(total))
@@ -188,6 +188,11 @@ def update():
     update_prices(username,API_KEY)
     flash(f"Market Values Updated", "success")
     return redirect("/dashboard")
+
+@home_routes.route("/forgot-password")
+def forgot():
+    flash(f"You Forgot Your Password", "warning")
+    return redirect("/")
 
 @home_routes.route("/logout")
 def logout():
