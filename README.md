@@ -2,7 +2,7 @@
 
 ## Functionality
 
-This web app allows you to purchase and hold stocks (up to 5 at any one time) and track your performance over time. The following information will be tracked
+This web app allows you to purchase and hold stocks (up to 5 at any one time) and track your performance over time. Each user will be given $100,000 to trade with and see how succesful they can be. The following information will be tracked
 
 * Purchase Price
 * Current Price
@@ -85,18 +85,35 @@ The about page quickly delves in to the user needs that the program is intending
 
 ### Dashboard
 
+The Dashboard page shows the user the current positions he/she holds. Additionally, it shows the current account cash value, stock value, and total account value.
+
+The current positions table shows the individual stocks held, the price they were bought at, the current price (as of which it was last updated), the number of shares held, the total position value by stock, and the unrealized gain/loss on the stock. 
+
+To update the market value of the stock portfolio, hit update market values. This will update the current price to the market and calculate the new total position value by stock and unrealized gain/loss on each stock as well as the new total stock value and total account value. 
+
 ### Buy/Sell
+
+The Trading Platform page is the hub for users to buy and sell stock. Stock tickers will be checked for the following validations:
+
+* Must not contain numbers
+* Must not exceed 4 characters
+* Must not be blank
+
+Symbols that do not represent a valid stock ticker but make it through the above validations will result in an improper request from the Alphavantage API which will lead to a danger message.
+
+As stated in the introduction, users may only hold 5 different stocks at one time. They may purchase those same 5 stocks in a staggered fashion but must sell a stock before they can buy a new one. Additionally, each user begins with $100,000. Each purchase order will be compared with the available cash to validate whether the purchase can be made. 
+
+Sell orders will be checked in a similar fashion and will additionally be required to already belong in your positions in order to be sold. The number of shares sold can also not exceed the amount that the user holds. 
+
+Blank entries will return an invalid request.
 
 ### Transactions
 
+The Transaction History Page keeps a log of all of the transactions that have occured in that account. Stock purchases are represented by a negative value (cash outflow) and stock sales are represented by a positive value (cash inflow).
+
 ### Logout
-As stated above, once you receive a message to enter your stock symbol, you are ready to use the program. 
 
-You may enter as many stock tickers as you'd like (depending on the API Key, the free version allows you to pull 5 stocks per minute or 500 per day). Once you've completed entering in your desired symbols, type 'Done' the next time the program prompts you to enter a symbol. Your symbols will be validated to exclude alphanumeric inputs and inputs greater than 4 characters.
-
-Once you have entered 'Done', the program will proceed to pull the corresponding data. If any symbols do not exist, the program will notify you.
-
-Finally, the program will notify you of the information outlined in the functionality section.
+The logout page brings users back to the home page and requires them to log back in again before they are able to access their specific dashboard page again. 
 
 ## Quality
 
