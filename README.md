@@ -60,3 +60,7 @@ You may enter as many stock tickers as you'd like (depending on the API Key, the
 Once you have entered 'Done', the program will proceed to pull the corresponding data. If any symbols do not exist, the program will notify you.
 
 Finally, the program will notify you of the information outlined in the functionality section.
+
+## Quality
+
+![Image of Yaktocat](https://octodex.github.com/images/yaktocat.png)
