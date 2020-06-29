@@ -1,3 +1,24 @@
+<!doctype html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+            table {
+                border-collapse: collapse;
+                width: 50%;
+            }
+            table, th, td {
+                border: 1px solid black;
+                text-align: center;
+            }
+            th {
+                background-color: #4CAF50;
+                color: white;
+            }
+            tr:hover {background-color: #f5f5f5;}
+        </style>
+    </head>
+
 {% extends "bootstrap_layout2.html" %}
 {% set active_page = "transactions" %}
 
@@ -26,3 +47,5 @@
     </table>
 
 {% endblock %}
+
+</html>

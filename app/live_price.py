@@ -21,16 +21,18 @@ def live_price(symbol,API_KEY):
 def transac_rec(symbol,price,shares,username,direction):
     csv_file_path = os.path.join((os.path.dirname(__file__)),"..", f"users/{username}", f"{username}.csv")
     csv_file_path2 = os.path.join((os.path.dirname(__file__)),"..", f"users/{username}", f"{username}_transactions.csv")
-    with open(csv_file_path, "a+",newline="") as csv_file:
-        writer = csv.DictWriter(csv_file, fieldnames=["Stock", "Bought Price", "Current Price", "Shares", "Total Value", "Unrealized Gain/Loss"])
-        writer.writerow({"Stock": symbol, "Bought Price": price, "Current Price": price, "Shares": shares, "Total Value": price*shares, "Unrealized Gain/Loss": "0"})
-    with open(csv_file_path2, "a+",newline="") as csv_file:
-        writer = csv.DictWriter(csv_file, fieldnames=["Transaction", "Value"])
-        if direction == "Buy":
+    if direction == "Buy":
+        with open(csv_file_path, "a+",newline="") as csv_file:
+            writer = csv.DictWriter(csv_file, fieldnames=["Stock", "Bought Price", "Current Price", "Shares", "Total Value", "Unrealized Gain/Loss"])
+            writer.writerow({"Stock": symbol, "Bought Price": f"{price:.2f}", "Current Price": f"{price:.2f}", "Shares": int(shares), "Total Value": format((price*shares),".2f"), "Unrealized Gain/Loss": "0"})
+        with open(csv_file_path2, "a+",newline="") as csv_file:
+            writer = csv.DictWriter(csv_file, fieldnames=["Transaction", "Value"])
             writer.writerow({"Transaction": f"Bought {shares} Shares of {symbol}", "Value": shares*price*-1})
-        else:
+    elif direction == "Buy+":
+        with open(csv_file_path2, "a+",newline="") as csv_file:
+            writer = csv.DictWriter(csv_file, fieldnames=["Transaction", "Value"])
+            writer.writerow({"Transaction": f"Bought {shares} Shares of {symbol}", "Value": shares*price*-1})
+    else:
+        with open(csv_file_path2, "a+",newline="") as csv_file:
+            writer = csv.DictWriter(csv_file, fieldnames=["Transaction", "Value"])
             writer.writerow({"Transaction": f"Sold {shares} Shares of {symbol}", "Value": shares*price})
-
-csv_file_path = os.path.join((os.path.dirname(__file__)),"..", f"users/aa2", f"aa2.csv")
-results = len(pd.read_csv(csv_file_path).to_dict("records"))
-print(results)    

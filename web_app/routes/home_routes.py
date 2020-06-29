@@ -82,7 +82,6 @@ def check_user():
 
 @home_routes.route("/users/create", methods=["POST"])
 def create_user():
-    print("FORM DATA:", dict(request.form))
     user = dict(request.form)
     results = signup(user['email'],user['username'],user['password'])
     if str(results) == "Username Is Already Taken":
@@ -99,10 +98,34 @@ def buy_order():
     csv_file_path = os.path.join((os.path.dirname(__file__)),"..","..", f"users/{username}", f"{username}.csv")
     pos_count = len(pd.read_csv(csv_file_path).to_dict("records"))
     csv_file_path2 = os.path.join((os.path.dirname(__file__)),"..","..", f"users/{username}", f"{username}_transactions.csv")
+    data = pd.read_csv(csv_file_path).to_dict("records")
     transactions_df = pd.read_csv(csv_file_path2)
     cash_value = float(transactions_df["Value"].sum())
+    stock = [n["Stock"] for n in data if n["Stock"] == user['ticker']]
     if str(results) == "Invalid Stock Symbol, Try Again":
         flash(f"{results}", "danger")
+    elif len(stock) > 0:
+        shares = int(user['share_count'])
+        if (shares*results) > cash_value:
+            flash(f"Insufficient Funds", "danger")
+        else:
+            with open(csv_file_path, "r") as csv_file:
+                reader = csv.DictReader(csv_file)
+                lines = []
+                for row in reader:
+                    if stock[0] != row["Stock"]:
+                        lines.append(row)
+                    else:
+                        row["Shares"] = int(row["Shares"]) + shares
+                        row["Total Value"] = float(row["Total Value"]) + (results*shares)
+                        row["Bought Price"] = float(row["Total Value"])/float(row["Shares"])
+                        lines.append(row)
+            with open(csv_file_path, 'w') as csv_file:
+                writer = csv.DictWriter(csv_file, fieldnames=["Stock", "Bought Price", "Current Price", "Shares", "Total Value", "Unrealized Gain/Loss"])
+                writer.writeheader()
+                writer.writerows(lines)
+            flash(f"You Bought {shares} Shares of {user['ticker']} For {to_usd(results*shares)}", "success")
+            transac_rec(user['ticker'],results,shares,username,"Buy+")
     elif pos_count > 4:
         flash(f"Reached Positions Limit of 5, Please Sell Position Before Buying A New One", "danger")
     else:
@@ -116,22 +139,37 @@ def buy_order():
 
 @home_routes.route("/users/sell", methods=["POST"])
 def sell_order():
-    stock_list = []
     username = active_user()
     csv_file_path = os.path.join((os.path.dirname(__file__)),"..","..", f"users/{username}", f"{username}.csv")
     data = pd.read_csv(csv_file_path).to_dict("records")
-    # for lines in data:
-    #     stock_list.append(lines["Stock"])
     user = dict(request.form)
-    stock_list = [n["Stock"] for n in data if n["Stock"] == user['ticker']]
-    if not stock_list:
+    stock = [n["Stock"] for n in data if n["Stock"] == user['ticker']]
+    shares_aval = [n["Shares"] for n in data if n["Stock"] == user['ticker']]
+    if not stock:
         flash(f"You Do Not Own That Stock", "danger")
+    elif int(user['share_count']) > shares_aval[0]:
+        flash(f"You Do Not Own That Many Shares", "danger")
     else:
         results = live_price(user['ticker'],API_KEY)
         if str(results) == "Invalid Stock Symbol, Try Again":
             flash(f"{results}", "danger")
         else:
             shares = int(user['share_count'])
+            with open(csv_file_path, "r") as csv_file:
+                reader = csv.DictReader(csv_file)
+                lines = []
+                for row in reader:
+                    if stock[0] != row["Stock"]:
+                        lines.append(row)
+                    elif shares_aval[0] > int(user['share_count']):
+                        row["Shares"] = int(row["Shares"]) - int(user['share_count'])
+                        row["Total Value"] = int(row["Shares"]) * float(row["Bought Price"])
+                        lines.append(row)
+            with open(csv_file_path, 'w') as csv_file:
+                writer = csv.DictWriter(csv_file, fieldnames=["Stock", "Bought Price", "Current Price", "Shares", "Total Value", "Unrealized Gain/Loss"])
+                writer.writeheader()
+                writer.writerows(lines)
+            transac_rec(user['ticker'],results,shares,username,"Sell")
             flash(f"You Sold {shares} Shares of {user['ticker']} For {to_usd(results*shares)}", "success")
     return redirect("/buy-sell")
 
