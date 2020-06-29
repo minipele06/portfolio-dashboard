@@ -63,4 +63,4 @@ Finally, the program will notify you of the information outlined in the function
 
 ## Quality
 
-![Image of Code Climate](/Users/anantoamin/Desktop/codeclimate.png)
+![Image of Code Climate](/codeclimate.png)
