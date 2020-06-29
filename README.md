@@ -49,10 +49,47 @@ If you receive a message stating the following:
 
 >Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
 
-Then you have succesfully launched the web app. Go to you internet browser and enter the above address to access the app locally. If you would like to run this web app on an external server, you may do so. Follow the instructions below for using Heroku.
+Then you have succesfully launched the web app. Go to you internet browser and enter the above address to access the app locally. If you would like to run this web app on an external server, you may do so through a host of different servers. Check out Professor Rossetti's page explaining in further detail how to proceed. 
 
 ## Step-by-Step Guide
 
+As stated above, once you receive a message in your terminal that the web app is running locally, you may then navigate to the local address.
+
+### Home Page
+
+The home page is the main landing page where it explains the basics of the web application and has a link to an about page which delves in to what needs the application is trying to meet.
+
+#### Register
+
+The registration box allows users who have never used the app to create an account.
+
+* Email: An email is required to start your account. The program will validate that the provided email address includes an "@" symbol.
+
+* Username: You may enter any username that you would like. However, duplicate usernames will not be permitted.
+
+* Password: There are no password requirements other than there must be at least one character and can not be blank.
+
+If any of the fields are empty, the program will give you an error message.
+
+#### Login
+
+The login box will authenticate users credentials. On a succesful authorization, users will be taken to their dashboard page.
+
+If any of the fields are empty, the program will give you an error message.
+
+The forgot password button is not currently functional and will only flash a warning message.
+
+### About Page
+
+The about page quickly delves in to the user needs that the program is intending to fulfill. 
+
+### Dashboard
+
+### Buy/Sell
+
+### Transactions
+
+### Logout
 As stated above, once you receive a message to enter your stock symbol, you are ready to use the program. 
 
 You may enter as many stock tickers as you'd like (depending on the API Key, the free version allows you to pull 5 stocks per minute or 500 per day). Once you've completed entering in your desired symbols, type 'Done' the next time the program prompts you to enter a symbol. Your symbols will be validated to exclude alphanumeric inputs and inputs greater than 4 characters.
@@ -63,4 +100,8 @@ Finally, the program will notify you of the information outlined in the function
 
 ## Quality
 
+The below screenshot shows the results of running the code through Code Climate in order to test the simplicity and maintainability of the code
+
 ![Image of Code Climate](/codeclimate.png)
+
+## Minimum Viable Product
