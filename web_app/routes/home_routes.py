@@ -12,6 +12,8 @@ from app.login import create_folder
 from app.live_price import live_price
 from app.live_price import transac_rec
 from app.live_price import update_prices
+from app.live_price import buy_transac
+from app.live_price import sell_transac
 from app.format import format_dict
 from app.format import format_dict2
 
@@ -118,21 +120,7 @@ def buy_order():
         if (shares*results) > cash_value:
             flash(f"Insufficient Funds", "danger")
         else:
-            with open(csv_file_path, "r") as csv_file:
-                reader = csv.DictReader(csv_file)
-                lines = []
-                for row in reader:
-                    if stock[0] != row["Stock"]:
-                        lines.append(row)
-                    else:
-                        row["Shares"] = int(row["Shares"]) + shares
-                        row["Total Value"] = float(row["Total Value"]) + (results*shares)
-                        row["Bought Price"] = float(row["Total Value"])/float(row["Shares"])
-                        lines.append(row)
-            with open(csv_file_path, 'w') as csv_file:
-                writer = csv.DictWriter(csv_file, fieldnames=["Stock", "Bought Price", "Current Price", "Shares", "Total Value", "Unrealized Gain/Loss"])
-                writer.writeheader()
-                writer.writerows(lines)
+            buy_transac(csv_file_path,stock,shares,results)
             flash(f"You Bought {shares} Shares of {user['ticker']} For {to_usd(results*shares)}", "success")
             transac_rec(user['ticker'],results,shares,username,"Buy+")
     elif pos_count > 4:
@@ -164,20 +152,7 @@ def sell_order():
             flash(f"{results}", "danger")
         else:
             shares = int(user['share_count'])
-            with open(csv_file_path, "r") as csv_file:
-                reader = csv.DictReader(csv_file)
-                lines = []
-                for row in reader:
-                    if stock[0] != row["Stock"]:
-                        lines.append(row)
-                    elif shares_aval[0] > int(user['share_count']):
-                        row["Shares"] = int(row["Shares"]) - int(user['share_count'])
-                        row["Total Value"] = int(row["Shares"]) * float(row["Current Price"])
-                        lines.append(row)
-            with open(csv_file_path, 'w') as csv_file:
-                writer = csv.DictWriter(csv_file, fieldnames=["Stock", "Bought Price", "Current Price", "Shares", "Total Value", "Unrealized Gain/Loss"])
-                writer.writeheader()
-                writer.writerows(lines)
+            sell_transac(csv_file_path,stock,shares,results,shares_aval[0])
             transac_rec(user['ticker'],results,shares,username,"Sell")
             flash(f"You Sold {shares} Shares of {user['ticker']} For {to_usd(results*shares)}", "success")
     return redirect("/buy-sell")
