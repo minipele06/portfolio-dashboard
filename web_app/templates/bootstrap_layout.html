@@ -6,14 +6,10 @@
                 position: relative;
                 top: -150px;
                 left: 8px;
-                /* background-color: black; */
                 color: black;
-                /* padding-left: 20px;
-                padding-right: 20px; */
             }
     </style>
     <title>Portfolio Simulator</title>
-
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
   </head>
 
@@ -37,8 +33,9 @@
     <!-- see: https://jinja.palletsprojects.com/en/2.11.x/tricks/ -->
     <!-- see: https://getbootstrap.com/docs/4.0/components/navbar/ -->
     {% set nav_links = [
+      ('/', 'home', 'Home'),
       ('/about', 'about', 'About'),
-      ('/register', 'new_user', 'Login/Sign Up')
+      ('/register', 'new_user', 'Register')
     ] -%}
     {% set active_page = active_page|default('index') -%}
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">

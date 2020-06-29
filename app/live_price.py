@@ -36,3 +36,18 @@ def transac_rec(symbol,price,shares,username,direction):
         with open(csv_file_path2, "a+",newline="") as csv_file:
             writer = csv.DictWriter(csv_file, fieldnames=["Transaction", "Value"])
             writer.writerow({"Transaction": f"Sold {shares} Shares of {symbol}", "Value": shares*price})
+
+def update_prices(username, API_KEY):
+    csv_file_path = os.path.join((os.path.dirname(__file__)),"..", f"users/{username}", f"{username}.csv")
+    with open(csv_file_path, "r") as csv_file:
+        reader = csv.DictReader(csv_file)
+        lines = []
+        for row in reader:
+            row["Current Price"] = float(live_price(row["Stock"], API_KEY))
+            row["Total Value"] = int(row["Shares"]) * float(row["Current Price"])
+            row["Unrealized Gain/Loss"] = (float(row["Current Price"]) - float(row["Bought Price"])) * int(row["Shares"])
+            lines.append(row)
+    with open(csv_file_path, 'w') as csv_file:
+                writer = csv.DictWriter(csv_file, fieldnames=["Stock", "Bought Price", "Current Price", "Shares", "Total Value", "Unrealized Gain/Loss"])
+                writer.writeheader()
+                writer.writerows(lines)

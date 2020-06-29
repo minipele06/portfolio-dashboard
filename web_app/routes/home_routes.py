@@ -11,6 +11,7 @@ from app.active_user import clear_user
 from app.login import create_folder
 from app.live_price import live_price
 from app.live_price import transac_rec
+from app.live_price import update_prices
 
 def to_usd(my_price):
     return f"${my_price:,.2f}"
@@ -68,26 +69,34 @@ def dashboard():
 @home_routes.route("/users/login", methods=["POST"])
 def check_user():
     user = dict(request.form)
-    username = user['username']
-    password = user['password']
-    # FYI: "warning", "primary", "danger", "success", etc. are bootstrap color classes
-    login_status = login_auth(username,password)
-    if str(login_status) == "Username/Password Incorrect":
-        flash(f"{login_status}", "danger")
+    if user['username'] == "" or user['password'] == "":
+        flash(f"Invalid Entry", "danger")
         return redirect("/")
     else:
-        create_folder(username)
-        flash(f"{login_status}", "success")
-        return redirect("/dashboard")
+        username = user['username']
+        password = user['password']
+        login_status = login_auth(username,password)
+        if str(login_status) == "Username/Password Incorrect":
+            flash(f"{login_status}", "danger")
+            return redirect("/")
+        else:
+            create_folder(username)
+            flash(f"{login_status}", "success")
+            return redirect("/dashboard")
 
 @home_routes.route("/users/create", methods=["POST"])
 def create_user():
     user = dict(request.form)
-    results = signup(user['email'],user['username'],user['password'])
-    if str(results) == "Username Is Already Taken":
-        flash(f"{results}", "danger")
+    if user['email'] == "" or user['username'] == "" or user['password'] == "":
+        flash(f"Invalid Entry", "danger")
+    elif not "@" in user['email'] or not "." in user['email']:
+        flash(f"Invalid Email", "danger")
     else:
-        flash(f"{results}", "success")
+        results = signup(user['email'],user['username'],user['password'])
+        if str(results) == "Username Is Already Taken" or str(results) == "Already Account Associated With That Email":
+            flash(f"{results}", "danger")
+        else:
+            flash(f"{results}", "success")
     return redirect("/")
 
 @home_routes.route("/users/buy", methods=["POST"])
@@ -163,7 +172,7 @@ def sell_order():
                         lines.append(row)
                     elif shares_aval[0] > int(user['share_count']):
                         row["Shares"] = int(row["Shares"]) - int(user['share_count'])
-                        row["Total Value"] = int(row["Shares"]) * float(row["Bought Price"])
+                        row["Total Value"] = int(row["Shares"]) * float(row["Current Price"])
                         lines.append(row)
             with open(csv_file_path, 'w') as csv_file:
                 writer = csv.DictWriter(csv_file, fieldnames=["Stock", "Bought Price", "Current Price", "Shares", "Total Value", "Unrealized Gain/Loss"])
@@ -175,6 +184,8 @@ def sell_order():
 
 @home_routes.route("/users/update")
 def update():
+    username = active_user()
+    update_prices(username,API_KEY)
     flash(f"Market Values Updated", "success")
     return redirect("/dashboard")
 
