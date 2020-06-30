@@ -117,6 +117,7 @@ def create_user():
 def buy_order():
     user = dict(request.form)
     username = active_user()
+    user['ticker'] = user['ticker'].upper()
     results = live_price(user['ticker'],API_KEY)
     csv_file_path = os.path.join((os.path.dirname(__file__)),"..","..", f"users/{username}", f"{username}.csv")
     pos_count = len(pd.read_csv(csv_file_path).to_dict("records"))
@@ -153,6 +154,7 @@ def sell_order():
     csv_file_path = os.path.join((os.path.dirname(__file__)),"..","..", f"users/{username}", f"{username}.csv")
     data = pd.read_csv(csv_file_path).to_dict("records")
     user = dict(request.form)
+    user['ticker'] = user['ticker'].upper()
     stock = [n["Stock"] for n in data if n["Stock"] == user['ticker']]
     shares_aval = [n["Shares"] for n in data if n["Stock"] == user['ticker']]
     if not stock:
