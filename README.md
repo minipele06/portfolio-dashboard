@@ -44,12 +44,14 @@ Mac
 >FLASK_APP=web_app flask run
 
 PC
+>export FLASK_APP=web_app # first time, to set the env var
+>flask run # subsequent times
 
 If you receive a message stating the following:
 
 >Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
 
-Then you have succesfully launched the web app. Go to you internet browser and enter the above address to access the app locally. If you would like to run this web app on an external server, you may do so through a host of different servers. Check out Professor Rossetti's page explaining in further detail how to proceed. 
+Then you have succesfully launched the web app. Go to you internet browser and enter the above address to access the app locally. If you would like to run this web app on an external server, you may do so through a host of different servers. Check out Professor Rossetti's page explaining in further detail how to proceed at the bottom [Web Servers](https://github.com/prof-rossetti/intro-to-python/blob/master/exercises/web-app/README.md). 
 
 ## Step-by-Step Guide
 
