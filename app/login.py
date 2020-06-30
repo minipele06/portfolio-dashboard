@@ -4,6 +4,12 @@ import os
 #authenticates user login
 def login_auth(username,password):
     csv_filepath = os.path.join((os.path.dirname(__file__)),"..", "credentials", "u&p.csv")
+    isexist = os.path.exists(os.path.join((os.path.dirname(__file__)),"..", "users", "active_user.csv"))
+    if isexist == False:
+        path = os.path.join((os.path.dirname(__file__)),"..", "users", "active_user.csv")
+        with open(path, 'w') as f:
+            writer = csv.DictWriter(f, fieldnames=["Username", "Email"])
+            writer.writeheader()
     with open(csv_filepath, "r") as csv_file:
         reader = csv.DictReader(csv_file)
         for row in reader:
