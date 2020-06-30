@@ -1,6 +1,7 @@
 import csv
 import os
 
+#authenticates user login
 def login_auth(username,password):
     csv_filepath = os.path.join((os.path.dirname(__file__)),"..", "credentials", "u&p.csv")
     with open(csv_filepath, "r") as csv_file:
@@ -17,6 +18,7 @@ def login_auth(username,password):
     result = "Username/Password Incorrect"
     return result
 
+#creates user folders when first registering
 def create_folder(username):
     isexist = os.path.exists(os.path.join((os.path.dirname(__file__)),"..",f"users/{username}"))
     if isexist == False:

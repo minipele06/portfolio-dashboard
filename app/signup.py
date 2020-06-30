@@ -1,7 +1,14 @@
 import csv
 import os
 
+#checks if username already exists or email is already associated with another account else user registration completed
 def signup(email,username,password):
+    isexist = os.path.exists(os.path.join((os.path.dirname(__file__)),"..", "credentials", "u&p.csv"))
+    if isexist == False:
+        path = os.path.join((os.path.dirname(__file__)),"..", "credentials", "u&p.csv")
+        with open(path, 'w') as f:
+            writer = csv.DictWriter(f, fieldnames=["Username", "Password", "Email"])
+            writer.writeheader()
     csv_filepath = os.path.join((os.path.dirname(__file__)),"..", "credentials", "u&p.csv")
     with open(csv_filepath, "r") as csv_file:
         reader = csv.DictReader(csv_file)

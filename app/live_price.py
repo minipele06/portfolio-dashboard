@@ -2,9 +2,9 @@ from dotenv import load_dotenv
 import os
 import requests
 import csv
-import pandas as pd
 import json
 
+#requests live price data based upon stock ticker
 def live_price(symbol,API_KEY):
     try:
         if symbol.isalpha() == False:
@@ -21,7 +21,7 @@ def live_price(symbol,API_KEY):
     except KeyError:
         return "Invalid Stock Symbol, Try Again"
 
-
+#records the transactions in the users individual csv dashboard file and transaction history file
 def transac_rec(symbol,price,shares,username,direction):
     csv_file_path = os.path.join((os.path.dirname(__file__)),"..", f"users/{username}", f"{username}.csv")
     csv_file_path2 = os.path.join((os.path.dirname(__file__)),"..", f"users/{username}", f"{username}_transactions.csv")
@@ -41,6 +41,7 @@ def transac_rec(symbol,price,shares,username,direction):
             writer = csv.DictWriter(csv_file, fieldnames=["Transaction", "Value"])
             writer.writerow({"Transaction": f"Sold {shares} Shares of {symbol}", "Value": shares*price})
 
+#updates the users dashboard csv file with the most up to date price and calculates total value and unrealized gain/loss
 def update_prices(username, API_KEY):
     csv_file_path = os.path.join((os.path.dirname(__file__)),"..", f"users/{username}", f"{username}.csv")
     with open(csv_file_path, "r") as csv_file:
@@ -56,6 +57,7 @@ def update_prices(username, API_KEY):
                 writer.writeheader()
                 writer.writerows(lines)
 
+#records a buy transaction on an already held stock
 def buy_transac(csv_file_path,stock,shares,results):
     with open(csv_file_path, "r") as csv_file:
         reader = csv.DictReader(csv_file)
@@ -73,6 +75,7 @@ def buy_transac(csv_file_path,stock,shares,results):
         writer.writeheader()
         writer.writerows(lines)
 
+#recrods a partial sell transaction
 def sell_transac(csv_file_path,stock,shares,results,shares_aval):
     with open(csv_file_path, "r") as csv_file:
         reader = csv.DictReader(csv_file)

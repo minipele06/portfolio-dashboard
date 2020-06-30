@@ -4,6 +4,7 @@ import csv
 import os
 import pandas as pd 
 
+#loading functions from python scripts
 from app.login import login_auth
 from app.signup import signup
 from app.active_user import active_user
@@ -17,28 +18,35 @@ from app.live_price import sell_transac
 from app.format import format_dict
 from app.format import format_dict2
 
+#format to USD with two decimals
 def to_usd(my_price):
     return f"${my_price:,.2f}"
 
+#load API_KEY from .env
 load_dotenv()
 
 API_KEY = os.getenv("ALPHAVANTAGE_API_KEY")
 
+#map home routes
 home_routes = Blueprint("home_routes", __name__)
 
+#Home page with function to clear user from active_user.csv
 @home_routes.route("/")
 def index():
     clear_user()
     return render_template("home.html")
 
+#About page with render template
 @home_routes.route("/about")
 def about():
     return render_template("about.html")
 
+#Trading page with render template
 @home_routes.route("/buy-sell")
 def buy_sell():
     return render_template("buy_sell.html")
 
+#Transaction History page with render template that pulls info from transaction.csv on every visit
 @home_routes.route("/transactions")
 def transac():
     username = active_user()
@@ -47,6 +55,7 @@ def transac():
     format_dict2(results)
     return render_template("transactions.html", results=results)
 
+#Dashboard page with render template that pulls info from user csv on each visit and calculates account values
 @home_routes.route("/dashboard", methods=["GET"])
 def dashboard():
     username = active_user()
@@ -68,6 +77,7 @@ def dashboard():
         total = cash_value + positions
     return render_template("dashboard.html", username=username, results=results, value=to_usd(cash_value), value2=to_usd(positions), value3=to_usd(total))
 
+#User login request where successful authentication leads user to user-specific dashboard page
 @home_routes.route("/users/login", methods=["POST"])
 def check_user():
     user = dict(request.form)
@@ -86,6 +96,7 @@ def check_user():
             flash(f"{login_status}", "success")
             return redirect("/dashboard")
 
+#User registration that checks user details and successful registration is added to username and password file
 @home_routes.route("/users/create", methods=["POST"])
 def create_user():
     user = dict(request.form)
@@ -101,6 +112,7 @@ def create_user():
             flash(f"{results}", "success")
     return redirect("/")
 
+#User purchase is checked for validity and posted to user csv and transaction csv
 @home_routes.route("/users/buy", methods=["POST"])
 def buy_order():
     user = dict(request.form)
@@ -134,6 +146,7 @@ def buy_order():
             transac_rec(user['ticker'],results,shares,username,"Buy")
     return redirect("/buy-sell")
 
+#User sale is checked for validity and posted to user csv and transaction csv
 @home_routes.route("/users/sell", methods=["POST"])
 def sell_order():
     username = active_user()
@@ -157,6 +170,7 @@ def sell_order():
             flash(f"You Sold {shares} Shares of {user['ticker']} For {to_usd(results*shares)}", "success")
     return redirect("/buy-sell")
 
+#Update dashboard with live prices and recalculate stock values and unrealized gain/loss
 @home_routes.route("/users/update")
 def update():
     username = active_user()
@@ -164,11 +178,13 @@ def update():
     flash(f"Market Values Updated", "success")
     return redirect("/dashboard")
 
+#Forgot Password flashes warning
 @home_routes.route("/forgot-password")
 def forgot():
     flash(f"You Forgot Your Password", "warning")
     return redirect("/")
 
+#User logout clears user from active_user.csv and brings user back to home page
 @home_routes.route("/logout")
 def logout():
     flash(f"You Have Succesfully Logged Out", "success")
